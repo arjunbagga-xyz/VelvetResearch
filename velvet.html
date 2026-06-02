@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velvet Nadir - Project Vision & Progress</title>
+    <style>
+        :root {
+            /* Dark Theme Defaults */
+            --bg-color: #020203;
+            --bg-panel: rgba(255, 255, 255, 0.03);
+            --text-main: #E2E8F0;
+            --text-sub: #4A5B7A;
+            --accent-primary: #8B5CF6; /* Purple */
+            --accent-secondary: #06B6D4; /* Cyan */
+            --accent-alert: #ff4488;
+            --divider: linear-gradient(90deg, transparent, #2D3748, transparent);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --btn-bg: rgba(255, 255, 255, 0.05);
+            --btn-hover: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            /* Light Theme Overrides */
+            --bg-color: #F8FAFC;
+            --bg-panel: rgba(0, 0, 0, 0.03);
+            --text-main: #1A202C;
+            --text-sub: #718096;
+            --divider: linear-gradient(90deg, transparent, #CBD5E0, transparent);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --btn-bg: rgba(0, 0, 0, 0.05);
+            --btn-hover: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* --- UI Controls --- */
+        .controls-overlay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .theme-btn {
+            background: var(--btn-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
+            text-transform: uppercase;
+        }
+
+        .theme-btn:hover {
+            background: var(--text-main);
+            color: var(--bg-color);
+        }
+
+        /* --- Header & Logo --- */
+        header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 20px;
+            position: relative;
+        }
+
+        .main-logo-wrapper {
+            position: relative;
+            width: 300px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .title-container {
+            text-align: center;
+            margin-top: -20px;
+            margin-bottom: 30px;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 0.8em;
+            margin-left: 0.8em;
+            color: var(--text-main);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .sub-title {
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.4em;
+            margin-left: 0.4em;
+            color: var(--text-sub);
+            text-transform: uppercase;
+        }
+
+        /* --- Tabs System --- */
+        .tabs-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            padding: 15px 25px;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-secondary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent-secondary);
+            box-shadow: 0 0 10px var(--accent-secondary);
+        }
+
+        /* --- Content Area --- */
+        .content-area {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px 60px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Section Styling --- */
+        .section-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .section-header::before,
+        .section-header::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--divider);
+        }
+
+        .section-title {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            color: var(--text-sub);
+            margin: 0 15px;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        .text-block {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+        
+        .highlight-text {
+            color: var(--accent-secondary);
+            font-weight: 500;
+        }
+
+        /* --- Grid & Cards --- */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .info-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+        
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: var(--accent-primary);
+        }
+
+        .info-card h4 {
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            color: var(--accent-secondary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .info-card p {
+            font-size: 13px;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+
+        /* --- Progress / Stats Widget --- */
+        .stats-widget {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .progress-row {
+            margin-bottom: 25px;
+        }
+        
+        .progress-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .progress-header span:last-child {
+            color: var(--accent-secondary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-secondary);
+            box-shadow: 0 0 10px var(--accent-secondary);
+            transition: width 1s ease-out;
+        }
+
+        /* --- Timeline / List --- */
+        .timeline-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tl-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .tl-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-sub);
+            margin-right: 15px;
+        }
+
+        .tl-item.done .tl-dot {
+            background: var(--accent-primary);
+            box-shadow: 0 0 8px var(--accent-primary);
+        }
+
+        .tl-item.active .tl-dot {
+            background: var(--accent-secondary);
+            box-shadow: 0 0 8px var(--accent-secondary);
+        }
+
+        .tl-item.next .tl-dot {
+            background: var(--accent-alert);
+        }
+
+        .tl-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tl-title {
+            font-size: 13px;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+        
+        .tl-desc {
+            font-size: 11px;
+            color: var(--text-sub);
+        }
+        
+        .badge {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+        
+        .tl-item.done .badge { color: var(--accent-primary); border: 1px solid var(--accent-primary); }
+        .tl-item.active .badge { color: var(--accent-secondary); border: 1px solid var(--accent-secondary); }
+        .tl-item.next .badge { color: var(--accent-alert); border: 1px solid var(--accent-alert); }
+
+        /* --- Architecture Diagram --- */
+        .arch-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .arch-layer {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            background: var(--bg-panel);
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .arch-title {
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: var(--accent-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .arch-nodes {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .arch-node {
+            font-size: 11px;
+            padding: 5px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-main);
+        }
+        
+        .arch-connector {
+            width: 2px;
+            height: 15px;
+            background: var(--text-sub);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="controls-overlay">
+        <button id="themeToggle" class="theme-btn">Toggle Theme</button>
+    </div>
+
+    <header>
+        <div class="main-logo-wrapper">
+            <canvas id="canvas-main"></canvas>
+        </div>
+        <div class="title-container">
+            <div class="main-title">Velvet Nadir</div>
+            <div class="sub-title">Decentralized Ephemeral AI</div>
+        </div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" data-tab="vision">Vision</button>
+        <button class="tab-btn" data-tab="architecture">Architecture</button>
+        <button class="tab-btn" data-tab="progress">Progress</button>
+    </div>
+
+    <div class="content-area">
+        
+        <!-- VISION TAB -->
+        <div id="vision" class="tab-content active">
+            <div class="section-header"><span class="section-title">The Mission</span></div>
+            <div class="text-block">
+                Velvet Nadir is a <span class="highlight-text">truly personal AI assistant</span> designed to run entirely on your own hardware, free from cloud dependencies. It perceives the world through distributed sensors, maintains persistent context across domains, and acts proactively on your behalf.
+            </div>
+
+            <div class="grid-layout">
+                <div class="info-card">
+                    <h4>Audio-First</h4>
+                    <p>UI is a last resort. Voice is the primary interface. Information is generated semantically and displayed contextually only when needed.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Local-First</h4>
+                    <p>Process on-device. The system guarantees absolute privacy via a dual perimeter, keeping sensitive biometric and contextual data within the local mesh.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Context-Aware</h4>
+                    <p>The system knows WHERE you are, WHAT you're doing, and WHO you're with through parallel tracking of Personal, Workshop, and Business domains.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Extensible</h4>
+                    <p>Built on the Zenoh communication fabric. Add new devices instantly. The Saraswati pipeline allows the system to learn and hot-load new skills.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARCHITECTURE TAB -->
+        <div id="architecture" class="tab-content">
+            <div class="section-header"><span class="section-title">Project Shen (Cognitive Core)</span></div>
+            
+            <div class="arch-diagram">
+                <div class="arch-layer" style="border-color: var(--accent-primary);">
+                    <div class="arch-title">Yi (意) - Intent Router</div>
+                    <div class="arch-nodes"><div class="arch-node">Dispatcher</div><div class="arch-node">Input Classification</div></div>
+                </div>
+                <div class="arch-connector"></div>
+                
+                <div style="display: flex; gap: 20px; width: 100%;">
+                    <div class="arch-layer" style="flex: 1;">
+                        <div class="arch-title">Po (魄) - Reflexes</div>
+                        <div class="arch-nodes"><div class="arch-node">Fast Path (< 100ms)</div><div class="arch-node">Vision Monitor</div></div>
+                    </div>
+                    <div class="arch-layer" style="flex: 1;">
+                        <div class="arch-title">Hun (魂) - Reasoning</div>
+                        <div class="arch-nodes"><div class="arch-node">LLM Engine</div><div class="arch-node">Tool Orchestration</div></div>
+                    </div>
+                </div>
+                
+                <div class="arch-connector"></div>
+                <div class="arch-layer">
+                    <div class="arch-title">Jing (精) - Memory</div>
+                    <div class="arch-nodes">
+                        <div class="arch-node">Aether (Hot RAM)</div>
+                        <div class="arch-node">Mnemosyne (Warm Vector)</div>
+                        <div class="arch-node">Tartarus (Cold SQL)</div>
+                    </div>
+                </div>
+                
+                <div class="arch-connector"></div>
+                <div class="arch-layer" style="border-color: var(--accent-secondary);">
+                    <div class="arch-title">Xi (息) - Background Processing</div>
+                    <div class="arch-nodes">
+                        <div class="arch-node">Fuxi (Consolidate)</div>
+                        <div class="arch-node">Agni (Purify)</div>
+                        <div class="arch-node">Saraswati (Learn)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-header" style="margin-top: 40px;"><span class="section-title">Mesh Communication</span></div>
+            <div class="text-block">
+                The device mesh is powered by <strong>Zenoh</strong> (Zero Overhead Network Protocol). It replaces traditional MQTT/gRPC setups, providing broker-free, peer-to-peer pub/sub, RPC, and streaming capabilities across nodes.
+            </div>
+        </div>
+
+        <!-- PROGRESS TAB -->
+        <div id="progress" class="tab-content">
+            <div class="section-header"><span class="section-title">Implementation Status</span></div>
+            
+            <div class="stats-widget">
+                <div class="progress-row">
+                    <div class="progress-header"><span>Core Architecture (MVP)</span><span>95%</span></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 95%;"></div></div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-header"><span>Full Vision Scope</span><span>70%</span></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 70%; background: var(--accent-primary); box-shadow: 0 0 10px var(--accent-primary);"></div></div>
+                </div>
+            </div>
+
+            <div class="section-header"><span class="section-title">Recent Sprints</span></div>
+            <div class="timeline-list">
+                
+                <div class="tl-item done">
+                    <div class="tl-dot"></div>
+                    <div class="tl-content">
+                        <div class="tl-title">Sprint 15: UI Dashboard & Wildcard Routing</div>
+                        <div class="tl-desc">Display bridge online, Zenoh active local sub pattern matching.</div>
+                    </div>
+                    <div class="badge">Complete</div>
+                </div>
+                
+                <div class="tl-item done">
+                    <div class="tl-dot"></div>
+                    <div class="tl-content">
+                        <div class="tl-title">Sprint 14: Basilisk Protocol</div>
+                        <div class="tl-desc">Secure ephemeral P2P communication, one-time biometric auth, RAM isolation.</div>
+                    </div>
+                    <div class="badge">Complete</div>
+                </div>
+                
+                <div class="tl-item done">
+                    <div class="tl-dot"></div>
+                    <div class="tl-content">
+                        <div class="tl-title">Sprint 13: Perception & Intelligence</div>
+                        <div class="tl-desc">TrustGate biometrics, Xiàng people recognition, Locus spatial tracking.</div>
+                    </div>
+                    <div class="badge">Complete</div>
+                </div>
+
+                <div class="tl-item active">
+                    <div class="tl-dot"></div>
+                    <div class="tl-content">
+                        <div class="tl-title">Sprint 16: Local-First Enforcement</div>
+                        <div class="tl-desc">Removing external API patchwork. Training custom OpenWakeWord models.</div>
+                    </div>
+                    <div class="badge">Active</div>
+                </div>
+                
+                <div class="tl-item next">
+                    <div class="tl-dot"></div>
+                    <div class="tl-content">
+                        <div class="tl-title">Future: Hardware & Integration</div>
+                        <div class="tl-desc">Jetson Thor deployment, Smart Home (HA), Vehicle CAN bus integration.</div>
+                    </div>
+                    <div class="badge">Planned</div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Theme Toggle ---
+        let isLightMode = false;
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            isLightMode = !isLightMode;
+            document.documentElement.setAttribute('data-theme', isLightMode ? 'light' : 'dark');
+        });
+
+        // --- Tabs Logic ---
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-tab');
+                
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+        // --- Animation Logic (Velvet V logo) ---
+        class PRNG {
+            constructor(seed) { this.seed = seed; }
+            next() { this.seed = (this.seed * 9301 + 49297) % 233280; return this.seed / 233280; }
+        }
+
+        function lerpVal(a, b, t) { return a + (b - a) * t; }
+        function lerp(a, b, t) { return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t }; }
+
+        function splitBezier(t, p0, p1, p2, p3) {
+            const q0 = p0; const q1 = lerp(p0, p1, t); const q2_temp = lerp(p1, p2, t); const q3_temp = lerp(p2, p3, t);
+            const q2 = lerp(q1, q2_temp, t); const q3_temp2 = lerp(q2_temp, q3_temp, t); const q3 = lerp(q2, q3_temp2, t);
+            return [q0, q1, q2, q3];
+        }
+
+        function getBezierPoint(t, p0, p1, p2, p3) {
+            let mt = 1 - t;
+            return {
+                x: mt * mt * mt * p0.x + 3 * mt * mt * t * p1.x + 3 * mt * t * t * p2.x + t * t * t * p3.x,
+                y: mt * mt * mt * p0.y + 3 * mt * mt * t * p1.y + 3 * mt * t * t * p2.y + t * t * t * p3.y
+            };
+        }
+
+        function drawEtherealBundle(ctx, prng, opts) {
+            const { startX, startY, cp1x, cp1y, cp2x, cp2y, endX, endY, count, spread, color1, color2, widthMultiplier = 1, timeOffset = 0, time = 0 } = opts;
+            ctx.globalCompositeOperation = isLightMode ? 'multiply' : 'lighter';
+
+            let threads = [];
+            for (let i = 0; i < count; i++) {
+                const n1 = (prng.next() - 0.5) * 2, n2 = (prng.next() - 0.5) * 2;
+                const n3 = (prng.next() - 0.5) * 2, n4 = (prng.next() - 0.5) * 2;
+                const timePhase = prng.next() * Math.PI * 2;
+                const slowT = time * 0.0004;
+                
+                let wave1 = (Math.sin(time * 0.002 + i * 0.3 + timeOffset + timePhase) + Math.cos(slowT * 1.7 + i)) * 6;
+                let wave2 = (Math.cos(time * 0.0025 + i * 0.2 + timeOffset - timePhase) + Math.sin(slowT * 1.3 - i)) * 6;
+                let tipWanderX = Math.sin(time * 0.0015 + timePhase) * 6;
+                let tipWanderY = Math.cos(time * 0.0017 - timePhase) * 6;
+
+                let p0 = { x: startX + n1 * spread * 0.1, y: startY + n2 * spread * 0.1 };
+                let p1 = { x: cp1x + n1 * spread + wave1, y: cp1y + n2 * spread + wave2 };
+                let p2 = { x: cp2x + n3 * spread - wave1, y: cp2y + n4 * spread - wave2 };
+                let p3 = { x: endX + n3 * spread * 0.3 + tipWanderX, y: endY + n4 * spread * 0.3 + tipWanderY };
+
+                let pts = splitBezier(1, p0, p1, p2, p3);
+                threads.push({ pts, fullP3: p3 });
+            }
+
+            threads.sort((a, b) => {
+                return Math.atan2(a.fullP3.y - startY, a.fullP3.x - startX) - Math.atan2(b.fullP3.y - startY, b.fullP3.x - startX);
+            });
+
+            for (let i = 0; i < threads.length - 1; i++) {
+                let t1 = threads[i].pts, t2 = threads[i + 1].pts;
+                ctx.beginPath();
+                ctx.moveTo(t1[0].x, t1[0].y);
+                ctx.bezierCurveTo(t1[1].x, t1[1].y, t1[2].x, t1[2].y, t1[3].x, t1[3].y);
+                ctx.lineTo(t2[3].x, t2[3].y);
+                ctx.bezierCurveTo(t2[2].x, t2[2].y, t2[1].x, t2[1].y, t2[0].x, t2[0].y);
+                ctx.closePath();
+
+                const grad = ctx.createLinearGradient(startX, startY, endX, endY);
+                let webAlpha = (isLightMode ? 0.3 : 0.4) + prng.next() * 0.2;
+                grad.addColorStop(0, color1.replace('ALPHA', webAlpha.toFixed(3)));
+                grad.addColorStop(1, color2.replace('ALPHA', (webAlpha * 0.6).toFixed(3)));
+                ctx.fillStyle = grad; ctx.fill();
+
+                let linksToDraw = 1 + Math.floor(prng.next() * 3);
+                for (let l = 0; l < linksToDraw; l++) {
+                    let linkT = 0.2 + prng.next() * 0.7;
+                    let pA = getBezierPoint(linkT, t1[0], t1[1], t1[2], t1[3]);
+                    let pB = getBezierPoint(linkT, t2[0], t2[1], t2[2], t2[3]);
+                    ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pB.x, pB.y);
+                    ctx.strokeStyle = color2.replace('ALPHA', isLightMode ? '0.4' : '0.6');
+                    ctx.lineWidth = 0.25 * widthMultiplier; ctx.stroke();
+                }
+            }
+
+            ctx.lineWidth = 0.75 * widthMultiplier;
+            threads.forEach((tData) => {
+                let pts = tData.pts;
+                ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+                ctx.bezierCurveTo(pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+                const grad = ctx.createLinearGradient(startX, startY, endX, endY);
+                let threadAlpha = (isLightMode ? 0.4 : 0.6) + prng.next() * 0.4;
+                grad.addColorStop(0, color1.replace('ALPHA', threadAlpha.toFixed(3)));
+                grad.addColorStop(1, color2.replace('ALPHA', threadAlpha.toFixed(3)));
+                ctx.strokeStyle = grad; ctx.stroke();
+                
+                ctx.beginPath(); ctx.arc(pts[3].x, pts[3].y, 1 * widthMultiplier, 0, Math.PI * 2);
+                ctx.fillStyle = color2.replace('ALPHA', isLightMode ? '0.7' : '0.9'); ctx.fill();
+            });
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        const canvas = document.getElementById('canvas-main');
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = 300 * dpr; canvas.height = 250 * dpr;
+        canvas.style.width = '300px'; canvas.style.height = '250px';
+        ctx.scale(dpr, dpr);
+
+        let globalTime = 0;
+        let lastTime = performance.now();
+
+        function renderLogo() {
+            let now = performance.now();
+            globalTime += (now - lastTime);
+            lastTime = now;
+            
+            ctx.clearRect(0, 0, 300, 250);
+            
+            let c1 = `rgba(139, 92, 246, ALPHA)`; // Purple
+            let c2 = `rgba(59, 130, 246, ALPHA)`;  // Blue
+            let c3 = `rgba(6, 182, 212, ALPHA)`;   // Cyan
+            
+            ctx.save();
+            ctx.translate(150, 160); // Center bottom
+            
+            let pulseScale = 1 + Math.sin(globalTime * 0.002) * 0.03;
+            ctx.scale(1.2 * pulseScale, 1.2 * pulseScale);
+            
+            const prng = new PRNG(12345);
+            let localTime = globalTime * 0.8;
+            const rX = 0, rY = 40;
+            
+            const b1 = { cp1x: -30, cp1y: 0, cp2x: -90, cp2y: -45, endX: -60, endY: -105 };
+            const b2 = { cp1x: -15, cp1y: 15, cp2x: -45, cp2y: -30, endX: -15, endY: -60 };
+            const b3 = { cp1x: 15, cp1y: 15, cp2x: 30, cp2y: -30, endX: 15, endY: -67 };
+            const b4 = { cp1x: 45, cp1y: 22, cp2x: 75, cp2y: -30, endX: 60, endY: -82 };
+
+            drawEtherealBundle(ctx, prng, { startX: rX, startY: rY, ...b1, count: 4, spread: 35, color1: c1, color2: c2, timeOffset: globalTime * 0.001, time: localTime });
+            drawEtherealBundle(ctx, prng, { startX: rX, startY: rY, ...b2, count: 2, spread: 15, color1: c1, color2: c3, timeOffset: globalTime * 0.0015, time: localTime });
+            drawEtherealBundle(ctx, prng, { startX: rX, startY: rY, ...b3, count: 3, spread: 20, color1: c2, color2: c3, timeOffset: globalTime * 0.0012 + 100, time: localTime });
+            drawEtherealBundle(ctx, prng, { startX: rX, startY: rY, ...b4, count: 4, spread: 30, color1: c1, color2: c2, timeOffset: globalTime * 0.001 + 200, time: localTime });
+            
+            ctx.restore();
+            requestAnimationFrame(renderLogo);
+        }
+        
+        renderLogo();
+
+    </script>
+</body>
+</html>
