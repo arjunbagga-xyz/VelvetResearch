@@ -190,6 +190,11 @@
             align-items: center;
             width: 100%;
             margin-bottom: 30px;
+            margin-top: 40px;
+        }
+
+        .section-header:first-child {
+            margin-top: 0;
         }
 
         .section-header::before,
@@ -220,6 +225,56 @@
         .highlight-text {
             color: var(--accent-secondary);
             font-weight: 500;
+        }
+
+        /* --- Problem/Solution Grid --- */
+        .ps-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        @media (min-width: 768px) {
+            .ps-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .ps-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .ps-problem {
+            border-left: 3px solid var(--accent-alert);
+            padding-left: 15px;
+        }
+        
+        .ps-solution {
+            border-left: 3px solid var(--accent-secondary);
+            padding-left: 15px;
+        }
+        
+        .ps-card h4 {
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .ps-problem h4 { color: var(--accent-alert); }
+        .ps-solution h4 { color: var(--accent-secondary); }
+        
+        .ps-card p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-sub);
         }
 
         /* --- Grid & Cards --- */
@@ -399,17 +454,23 @@
             border: 1px solid var(--border-color);
             background: var(--bg-panel);
             border-radius: 6px;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
             position: relative;
         }
         
         .arch-title {
-            font-size: 11px;
+            font-size: 12px;
             letter-spacing: 0.2em;
             color: var(--accent-secondary);
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             text-transform: uppercase;
+        }
+        
+        .arch-subtitle {
+            font-size: 10px;
+            color: var(--text-sub);
+            margin-bottom: 15px;
         }
         
         .arch-nodes {
@@ -421,15 +482,16 @@
         
         .arch-node {
             font-size: 11px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             color: var(--text-main);
+            background: rgba(0,0,0,0.2);
         }
         
         .arch-connector {
             width: 2px;
-            height: 15px;
+            height: 20px;
             background: var(--text-sub);
         }
 
@@ -452,65 +514,106 @@
     </header>
 
     <div class="tabs-container">
-        <button class="tab-btn active" data-tab="vision">Vision</button>
-        <button class="tab-btn" data-tab="architecture">Architecture</button>
-        <button class="tab-btn" data-tab="progress">Progress</button>
+        <button class="tab-btn active" data-tab="vision">Vision & Architecture</button>
+        <button class="tab-btn" data-tab="progress">Progress & Roadmap</button>
     </div>
 
     <div class="content-area">
         
-        <!-- VISION TAB -->
+        <!-- VISION & ARCHITECTURE TAB -->
         <div id="vision" class="tab-content active">
+            
+            <div class="section-header"><span class="section-title">The Problem</span></div>
+            
+            <div class="ps-grid">
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <h4>Security & Centralization</h4>
+                        <p>Modern AI systems funnel deeply personal context—biometrics, daily habits, and private conversations—into centralized corporate silos, creating massive honeypots and surrendering user sovereignty over their own data.</p>
+                    </div>
+                    <div class="ps-solution">
+                        <h4>The Local-First Perimeter</h4>
+                        <p>Velvet Nadir establishes a rigid "Dual Perimeter." It enforces absolute privacy by ensuring raw conversational data, audio, and visual state never leave the local Zenoh mesh. Processing happens on your hardware, not in the cloud.</p>
+                    </div>
+                </div>
+                
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <h4>Context Fragmentation</h4>
+                        <p>We exist across multiple domains (Home, Workshop, Business) using disparate devices. Current systems require constant context-switching and manual synchronization, lacking an understanding of <em>where</em> we are and <em>what</em> matters right now.</p>
+                    </div>
+                    <div class="ps-solution">
+                        <h4>Parallel Context Tracks</h4>
+                        <p>A unified context stream maintains parallel domain tracks. The system inherently understands your location and engagement level, seamlessly shifting focus (e.g., from a 'Workshop' CAD project to a 'Business' escalation) without explicit prompting.</p>
+                    </div>
+                </div>
+                
+                <div class="ps-card">
+                    <div class="ps-problem">
+                        <h4>Intrusive Interfaces</h4>
+                        <p>Computing has become overly complex, demanding our visual attention through screens and convoluted UIs. Technology should empower us, not distract us, yet we are constantly forced to adapt to the machine's interface.</p>
+                    </div>
+                    <div class="ps-solution">
+                        <h4>Audio-First Ambience</h4>
+                        <p>UI is treated as a last resort. Voice is the primary, frictionless interface. When visual information is necessary, the agent generates ephemeral, semantic wireframes rendered contextually to the nearest appropriate display, allowing the technology to disappear into the background.</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="section-header"><span class="section-title">The Mission</span></div>
             <div class="text-block">
-                Velvet Nadir is a <span class="highlight-text">truly personal AI assistant</span> designed to run entirely on your own hardware, free from cloud dependencies. It perceives the world through distributed sensors, maintains persistent context across domains, and acts proactively on your behalf.
+                Velvet Nadir is a <span class="highlight-text">truly personal AI assistant</span> designed to run entirely on your own hardware. It perceives the world through distributed sensors, maintains persistent context across domains, acts proactively via graduated autonomy, and remains infinitely extensible.
             </div>
 
             <div class="grid-layout">
                 <div class="info-card">
                     <h4>Audio-First</h4>
-                    <p>UI is a last resort. Voice is the primary interface. Information is generated semantically and displayed contextually only when needed.</p>
+                    <p>Information is generated semantically and displayed contextually only when needed. Voice remains the primary interface.</p>
                 </div>
                 <div class="info-card">
                     <h4>Local-First</h4>
-                    <p>Process on-device. The system guarantees absolute privacy via a dual perimeter, keeping sensitive biometric and contextual data within the local mesh.</p>
+                    <p>Process on-device. The system guarantees absolute privacy via a dual perimeter, keeping sensitive biometric data within the local mesh.</p>
                 </div>
                 <div class="info-card">
                     <h4>Context-Aware</h4>
-                    <p>The system knows WHERE you are, WHAT you're doing, and WHO you're with through parallel tracking of Personal, Workshop, and Business domains.</p>
+                    <p>The system tracks Personal, Workshop, and Business domains, dynamically assessing your engagement level to surface relevant tasks.</p>
                 </div>
                 <div class="info-card">
                     <h4>Extensible</h4>
-                    <p>Built on the Zenoh communication fabric. Add new devices instantly. The Saraswati pipeline allows the system to learn and hot-load new skills.</p>
+                    <p>Powered by the Zenoh fabric. Add new devices instantly. The Saraswati pipeline allows the system to observe, learn, and hot-load new skills.</p>
                 </div>
             </div>
-        </div>
 
-        <!-- ARCHITECTURE TAB -->
-        <div id="architecture" class="tab-content">
-            <div class="section-header"><span class="section-title">Project Shen (Cognitive Core)</span></div>
+            <div class="section-header"><span class="section-title">Architecture: Project Shen</span></div>
+            <div class="text-block">
+                The cognitive core is modeled after a traditional Chinese taxonomy, splitting intelligence into specialized, highly efficient subsystems communicating over a broker-free, peer-to-peer Zenoh mesh.
+            </div>
             
             <div class="arch-diagram">
                 <div class="arch-layer" style="border-color: var(--accent-primary);">
-                    <div class="arch-title">Yi (意) - Intent Router</div>
+                    <div class="arch-title">Yi (意)</div>
+                    <div class="arch-subtitle">Intent Router</div>
                     <div class="arch-nodes"><div class="arch-node">Dispatcher</div><div class="arch-node">Input Classification</div></div>
                 </div>
                 <div class="arch-connector"></div>
                 
                 <div style="display: flex; gap: 20px; width: 100%;">
                     <div class="arch-layer" style="flex: 1;">
-                        <div class="arch-title">Po (魄) - Reflexes</div>
-                        <div class="arch-nodes"><div class="arch-node">Fast Path (< 100ms)</div><div class="arch-node">Vision Monitor</div></div>
+                        <div class="arch-title">Po (魄)</div>
+                        <div class="arch-subtitle">Fast Reflexes (< 100ms)</div>
+                        <div class="arch-nodes"><div class="arch-node">Learned Reactions</div><div class="arch-node">Vision Monitor</div></div>
                     </div>
                     <div class="arch-layer" style="flex: 1;">
-                        <div class="arch-title">Hun (魂) - Reasoning</div>
+                        <div class="arch-title">Hun (魂)</div>
+                        <div class="arch-subtitle">Deep Reasoning</div>
                         <div class="arch-nodes"><div class="arch-node">LLM Engine</div><div class="arch-node">Tool Orchestration</div></div>
                     </div>
                 </div>
                 
                 <div class="arch-connector"></div>
                 <div class="arch-layer">
-                    <div class="arch-title">Jing (精) - Memory</div>
+                    <div class="arch-title">Jing (精)</div>
+                    <div class="arch-subtitle">Tiered Persistent Memory</div>
                     <div class="arch-nodes">
                         <div class="arch-node">Aether (Hot RAM)</div>
                         <div class="arch-node">Mnemosyne (Warm Vector)</div>
@@ -520,7 +623,8 @@
                 
                 <div class="arch-connector"></div>
                 <div class="arch-layer" style="border-color: var(--accent-secondary);">
-                    <div class="arch-title">Xi (息) - Background Processing</div>
+                    <div class="arch-title">Xi (息)</div>
+                    <div class="arch-subtitle">Background Scheduler (Breath Tasks)</div>
                     <div class="arch-nodes">
                         <div class="arch-node">Fuxi (Consolidate)</div>
                         <div class="arch-node">Agni (Purify)</div>
@@ -528,14 +632,9 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="section-header" style="margin-top: 40px;"><span class="section-title">Mesh Communication</span></div>
-            <div class="text-block">
-                The device mesh is powered by <strong>Zenoh</strong> (Zero Overhead Network Protocol). It replaces traditional MQTT/gRPC setups, providing broker-free, peer-to-peer pub/sub, RPC, and streaming capabilities across nodes.
-            </div>
         </div>
 
-        <!-- PROGRESS TAB -->
+        <!-- PROGRESS & ROADMAP TAB -->
         <div id="progress" class="tab-content">
             <div class="section-header"><span class="section-title">Implementation Status</span></div>
             
@@ -550,14 +649,14 @@
                 </div>
             </div>
 
-            <div class="section-header"><span class="section-title">Recent Sprints</span></div>
+            <div class="section-header"><span class="section-title">Sprint History & Roadmap</span></div>
             <div class="timeline-list">
                 
                 <div class="tl-item done">
                     <div class="tl-dot"></div>
                     <div class="tl-content">
                         <div class="tl-title">Sprint 15: UI Dashboard & Wildcard Routing</div>
-                        <div class="tl-desc">Display bridge online, Zenoh active local sub pattern matching.</div>
+                        <div class="tl-desc">Implemented display bridge and React-based UI connectivity. Enhanced Zenoh fabric with full wildcard pattern matching for comprehensive local subscription routing.</div>
                     </div>
                     <div class="badge">Complete</div>
                 </div>
@@ -565,8 +664,8 @@
                 <div class="tl-item done">
                     <div class="tl-dot"></div>
                     <div class="tl-content">
-                        <div class="tl-title">Sprint 14: Basilisk Protocol</div>
-                        <div class="tl-desc">Secure ephemeral P2P communication, one-time biometric auth, RAM isolation.</div>
+                        <div class="tl-title">Sprint 14: The Basilisk Protocol</div>
+                        <div class="tl-desc">Established secure ephemeral P2P communication channels. Integrated one-time biometric authentication and volatile RAM enclaves for highly sensitive operations.</div>
                     </div>
                     <div class="badge">Complete</div>
                 </div>
@@ -575,7 +674,7 @@
                     <div class="tl-dot"></div>
                     <div class="tl-content">
                         <div class="tl-title">Sprint 13: Perception & Intelligence</div>
-                        <div class="tl-desc">TrustGate biometrics, Xiàng people recognition, Locus spatial tracking.</div>
+                        <div class="tl-desc">Finalized core intelligence architecture. Deployed TrustGate biometric security perimeter, Xiàng facial/voice recognition layer, and Locus spatial tracking with geofence learning.</div>
                     </div>
                     <div class="badge">Complete</div>
                 </div>
@@ -584,7 +683,7 @@
                     <div class="tl-dot"></div>
                     <div class="tl-content">
                         <div class="tl-title">Sprint 16: Local-First Enforcement</div>
-                        <div class="tl-desc">Removing external API patchwork. Training custom OpenWakeWord models.</div>
+                        <div class="tl-desc">Severing reliance on cloud fallback. Removing the Google AI adapter patchwork to mandate local Ollama/Llama.cpp processing. Training the custom "Hey Velvet" OpenWakeWord model.</div>
                     </div>
                     <div class="badge">Active</div>
                 </div>
@@ -593,7 +692,7 @@
                     <div class="tl-dot"></div>
                     <div class="tl-content">
                         <div class="tl-title">Future: Hardware & Integration</div>
-                        <div class="tl-desc">Jetson Thor deployment, Smart Home (HA), Vehicle CAN bus integration.</div>
+                        <div class="tl-desc">Deploy mobile brain configuration to Jetson Thor hardware. Implement deep physical integrations including Smart Home (Home Assistant) and Vehicle CAN bus / OBD-II systems.</div>
                     </div>
                     <div class="badge">Planned</div>
                 </div>
